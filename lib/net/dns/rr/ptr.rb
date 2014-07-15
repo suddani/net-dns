@@ -71,7 +71,7 @@ module Net
 
 
           def check_name(input)
-            IPAddr.new(str)
+            input#IPAddr.new(str)
           rescue
             raise ArgumentError, "Invalid PTR Section `#{input}'"
           end

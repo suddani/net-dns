@@ -123,7 +123,7 @@ module Net
         # Initialize a new instance from the Class value.
         def initialize_from_num(num)
           key = num.to_i
-          @num, @str = key, CLASSES.invert[key]
+          @num, @str = key, CLASSES.invert[key==32769?1:key]
         end
 
       end
