@@ -8,6 +8,11 @@ module Net # :nodoc:
       class TXT < RR
         attr_reader :txt
 
+
+        def value
+          @txt
+        end
+
         private
 
         def build_pack
@@ -49,6 +54,10 @@ module Net # :nodoc:
         end
 
         private
+
+          def get_inspect
+            @txt
+          end
 
           def set_type
             @type = Net::DNS::RR::Types.new("TXT")

@@ -9,7 +9,7 @@ module Net # :nodoc:
         
         attr_reader :priority, :weight, :port, :host
 
-        SRV_REGEXP = Regexp.new("(\\d) (\\d) (\\d+) (\\w+)", Regexp::IGNORECASE)
+        SRV_REGEXP = Regexp.new("(\\d) (\\d) (\\d+) ((\\w+\\.)+)", Regexp::IGNORECASE)
         
         private
         
@@ -23,6 +23,7 @@ module Net # :nodoc:
               raise ArgumentError,
               "Format error for RR string (maybe CLASS and TYPE not valid?)"
             end
+            puts "String is #{rrstring}"
             @priority = $1.to_i
             @weight = $2.to_i
             @port = $3.to_i
@@ -44,6 +45,8 @@ module Net # :nodoc:
             @host << str
           end
           @host=@host.join(".")
+
+          @rdata = "#{@priority} #{@weight} #{@port} #{@host}"
           offset
         end
         
@@ -55,8 +58,12 @@ module Net # :nodoc:
 
           def build_pack
             puts "Host: #{@host}"
-            @srvdata=[@priority.to_i, @weight.to_i, @port.to_i, @host.length].pack(" n n n C")+@host#.scan(/./).map(&:to_i).pack("C#{@host.length}")#+pack_name(@host)
+            @srvdata=[@priority.to_i, @weight.to_i, @port.to_i].pack(" n n n")+pack_name(@host)#.scan(/./).map(&:to_i).pack("C#{@host.length}")#+pack_name(@host)
             @rdlength = @srvdata.size
+          end
+
+          def get_inspect
+            @rdata
           end
 
           def get_data
